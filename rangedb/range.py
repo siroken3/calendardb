@@ -3,28 +3,68 @@
 import sys
 
 class Range(object):
-    # boundtype: 0:(), 1:(], 2:[), 3:[]
-    __slots__ = ["lower","upper", "boundtype"]
+    # boundtype: 0:[], 1:[)
+    __slots__ = ["low","high", "boundtype"]
 
-    def __init__(self, lower=-sys.maxint - 1, upper=sys.maxint, boundtype=3):
-        self.lower = lower
-        self.upper = upper
+    def __init__(self, low=-sys.maxint - 1, high=sys.maxint, boundtype=1):
+        self.low = low
+        self.high = high
         self.boundtype = boundtype
+        self._normalize()
 
-    def normalize(self):
-        if self.boundtype == 0:
-            self.lower += 1
-            self.upper -= 1
-            self.boundtype = 3
+    def _normalize(self):
         if self.boundtype == 1:
-            self.lower += 1
-            self.boundtype = 3
-        if self.boundtype == 2:
-            self.upper -= 1
-            self.boundtype = 3
+            self.high -= 1
+            self.boundtype = 0
 
     def __eq__(self, other):
-        other.normalize()
-        return (self.lower == other.lower) and (self.upper == other.upper)
+        return (self.low == other.low) and (self.high == other.high)
 
+    def __gt__(self, other):
+        if self == other:
+            return False
+        if self in other or other in self:
+            return False
+        if other.low <= self.low:
+            return True
+        else:
+            return False
+
+    def __ge__(self, other):
+        if self == other:
+            return True
+        if self in other or other in self:
+            return False
+        if other.low <= self.low <= other.high:
+            return True
+        else:
+            return False
+
+    def __lt__(self, other):
+        if self == other:
+            return False
+        if self in other or other in self:
+            return False
+        if self.low <= other.low:
+            return True
+        else:
+            return False
+
+    def __le__(self, other):
+        if self == other:
+            return True
+        if self in other or other in self:
+            return False
+        if self.low <= other.low:
+            return True
+        else:
+            return False
+
+    def __contains__(self, other):
+        if self.__eq__(other):
+            return True
+        if self.low <= other.low and self.high >= other.high:
+            return True
+        else:
+            return False
 
