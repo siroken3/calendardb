@@ -4,7 +4,7 @@ import sys
 
 class Range(object):
     # boundtype: 0:[], 1:[)
-    __slots__ = ["low","high", "boundtype"]
+    __slots__ = ["low", "high", "boundtype"]
 
     def __init__(self, low=-sys.maxint - 1, high=sys.maxint, boundtype=1):
         self.low = low
