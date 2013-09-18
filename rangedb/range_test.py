@@ -1,17 +1,5 @@
 import range
 
-def test_range_type0():
-    r = range.Range(1,3,0)
-    assert r.low == 1
-    assert r.high == 3
-    assert r.boundtype == 0
-
-def test_range_type1():
-    r = range.Range(1,2,1)
-    assert r.low == 1
-    assert r.high == 1
-    assert r.boundtype == 0
-
 def test_equals():
     a = range.Range(1,2,0)
     b = range.Range(1,3,1)
