@@ -13,16 +13,15 @@ class OutofMaxIndexError(exception.Exception):
 class ValueNotFoundError(exception.Exception):
     pass
 
-class BplusTreeValue(object):
+class NodeNotFoundError(excepton.Exception):
     pass
 
-class BplusTreeNode(object):
-    __slots__ = ["degree", "children", "ranges", "max_index"]
+class BTreeNode(object):
+    __slots__ = ["children", "ranges", "max_index"]
 
     def __init__(self, degree):
         if degree % 2 != 0:
             raise DegreeNotEvenNumberError
-        self.degree = degree
         self.ranges = [None] * self.degree
         self.max_index = degree + 1
         self.children = [None] * self.max_index
@@ -32,12 +31,12 @@ class BplusTreeNode(object):
             raise OutofMaxIndexError
         self.children[index] = child
 
-class BplusTree(object):
+class BTree(object):
     __slots__ = ["degree", "root"]
 
     def __init__(self, degree):
         self.degree = degree
-        self.root = BplusTreeNode(degree)
+        self.root = BTreeNode(degree)
 
     def add(self, a_range):
         (node, index, range) = self._find(self.root, a_range)
@@ -54,10 +53,10 @@ class BplusTree(object):
 
     def _find(self, node, a_range):
         end_of_index = len(node.ranges) - 1
-        for i, range in enumerate(node.ranges):
-            if a_range < range:
-                return self._find(node.children[i])
-            if a_range in range:
-                return (node, i, range)
+        for i, r in enumerate(node.ranges):
+            if a_range < r:
+                return self._find(node.children[i], a_range)
+            if a_range in r:
+                return (node, i, r)
             else if a_range < node.ranges[i + 1]:
-                return self._find(node.children[i+1])
+                return self._find(node.children[i+1], a_range)
