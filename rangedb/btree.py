@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
-
-# http://ja.wikipedia.org/wiki/%E5%8C%BA%E9%96%93%E6%9C%A8
+# http://ja.wikipedia.org/wiki/B%E6%9C%A8
 
 import exception
 
 class DegreeShouldBeEvenNumberError(excepton.Exception):
     pass
 
-class OutofMaxIndexError(exception.Exception):
+class OutOfBoundError(exception.Exception):
     pass
 
 class ValueNotFoundError(exception.Exception):
@@ -17,42 +16,47 @@ class NodeNotFoundError(excepton.Exception):
     pass
 
 class BTreeNode(object):
-    __slots__ = ["children", "ranges", "max_index"]
+    __slots__ = ["branches", "values"]
 
-    def __init__(self, degree):
-        if degree % 2 != 0:
+    def __init__(self, order):
+        # order == branch number
+        if not (order - 1) % 2 == 0:
             raise DegreeNotEvenNumberError
-        self.ranges = [None] * self.degree
-        self.max_index = degree + 1
-        self.children = [None] * self.max_index
+        self.branches = [None] * order
+        self.values = [None] * (order - 1)
 
-    def add_child(self, index, child):
-        if index > self.max_index:
-            raise OutofMaxIndexError
-        self.children[index] = child
+    def add_node(self, index, node):
+        if index >= len(self.nodes)
+            raise OutOfBoundError
+        self.branchs[index] = node
 
 class BTree(object):
-    __slots__ = ["degree", "root"]
+    __slots__ = ["order", "root"]
 
-    def __init__(self, degree):
-        self.degree = degree
-        self.root = BTreeNode(degree)
+    def __init__(self, order):
+        self.order = order
+        self.root = BTreeNode(order)
 
-    def add(self, a_range):
-        (node, index, range) = self._find(self.root, a_range)
+    def add(self, a_value):
+        (node, index, value) = self._find(self.root, a_value)
 
     def delete(self, a_range):
         pass
 
-    def find(self, a_range):
-        return self._find(self.root, a_range)
+    def find(self, a_value):
+        return self._find(self.root, a_value)
 
-    def _find(self, node, a_range):
-        end_of_index = len(node.ranges) - 1
-        for i, r in enumerate(node.ranges):
-            if a_range < r:
-                return self._find(node.children[i], a_range)
-            if a_range in r:
-                return (node, i, r)
-            else if a_range < node.ranges[i + 1]:
-                return self._find(node.children[i+1], a_range)
+    def _find(self, node, a_value):
+        def _none_or_deeper(node, index, a_value):
+            if not node.branches[index] == None:
+                return self._find(node.branches[index], a_value)
+            else:
+                return (node, index, None)
+
+        for i, v in enumerate(node.values):
+            if a_value < v:
+                return _none_or_deeper(node, i, a_value)
+            else if a_value == v:
+                return (node, i, a_value)
+            else if i == len(node.values) - 1:
+                retun _none_or_deeper(node, i+1, a_value)
