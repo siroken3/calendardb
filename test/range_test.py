@@ -1,3 +1,4 @@
+import pytest
 import range
 
 def test_equals():
@@ -57,4 +58,17 @@ def test_lt():
     assert not b < a
     assert not a < a
 
+def test_add():
+    a = range.Range(1,2)
+    b = range.Range(2,5)
+    c = range.Range(3,5)
+    assert a + b == range.Range(1,5)
+    with pytest.raises(ValueError):
+        a + c
 
+def test_mul():
+    a = range.Range(1,3)
+    b = range.Range(2,5)
+    assert a * b == range.Range(2, 3)
+    c = range.Range(3,5)
+    assert a * c == range.Range(3, 3)
