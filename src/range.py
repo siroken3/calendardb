@@ -7,8 +7,17 @@ class Range(object):
     __slots__ = ["low", "high", "boundtype"]
 
     @classmethod
-    def empty():
+    def empty(cls):
         return Range(0, 0)
+
+
+    @classmethod
+    def split(cls, range_a, range_b):
+        center = range_a * range_b
+        left = cls(min(range_a.low, range_b.low), center.low)
+        right = cls(center.high, max(range_a.high, range_b.high))
+        return (left, center, right)
+
 
     def __init__(self, low=-sys.maxint - 1, high=sys.maxint, boundtype=0):
         self.low = low
@@ -92,3 +101,4 @@ class Range(object):
         if other.low <= self.low and other.high <= self.high:
             return Range(self.low, other.high)
         return Range(self.low, self.low)
+

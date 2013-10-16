@@ -72,3 +72,20 @@ def test_mul():
     assert a * b == range.Range(2, 3)
     c = range.Range(3,5)
     assert a * c == range.Range(3, 3)
+
+def test_split1():
+    a = range.Range(1, 3)
+    b = range.Range(2, 5)
+    (x, y, z) = range.Range.split(a, b)
+    assert x == range.Range(1, 2)
+    assert y == range.Range(2, 3)
+    assert z == range.Range(3, 5)
+
+def test_split2():
+    a = range.Range(1, 6)
+    b = range.Range(2, 5)
+    (x, y, z) = range.Range.split(a, b)
+    assert x == range.Range(1, 2)
+    assert y == range.Range(2, 5)
+    assert z == range.Range(5, 6)
+
