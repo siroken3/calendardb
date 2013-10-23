@@ -11,7 +11,7 @@ class _BNode(object):
         self.children = children or []
         if self.children:
             assert len(self.contents) + 1 == len(self.children), \
-                    "one more child than data item required"
+                "one more child than data item required"
 
     def __repr__(self):
         name = getattr(self, "children", 0) and "Branch" or "Leaf"
