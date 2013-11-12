@@ -1,5 +1,5 @@
 import random
-from btree import BTree, BPlusTree
+from index import BTree, BPlusTree
 
 def test_additions():
     bt = BTree(20)
